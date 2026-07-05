@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Bildung &amp; Teilhabe</title>
-<link rel="stylesheet" href="assets/stats.css?v=6">
+<link rel="stylesheet" href="assets/stats.css?v=7">
 </head>
 <body>
 <div class="app">
@@ -25,16 +25,15 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=7"></script>
+<script src="assets/stats-data.js?v=8"></script>
 <script>
 initData().then(function(){
   let mode='wissen';
   function render(){
     let html='';
     BILDUNG_GRUPPEN.forEach((name,i)=>{
-      const sub=DATA.filter(r=>r.bildung===i);
-      const val=mean(sub.map(r=>mode==='wissen'?r.Twissen:r.Twollen));
-      html+=barRow(name,val,'hi',sub.length);
+      const vals=DATA.filter(r=>r.bildung===i).map(r=>mode==='wissen'?r.Twissen:r.Twollen);
+      html+=barRow(name,mean(vals),'hi',vals.length,std(vals));
     });
     document.getElementById('chart').innerHTML='<div class="group">'+html+'</div>';
   }
