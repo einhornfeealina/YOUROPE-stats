@@ -20,13 +20,15 @@
     </div>
 
     <div class="foot">
-      Datenquelle (geplant): GET-Endpunkt des bestehenden Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>). Diese Seite zeigt aktuell nur clientseitig erzeugte Zufallsdaten (<code>assets/stats-data.js</code>) zur Abstimmung von Layout und Kennzahlen.
+      Datenquelle: GET-Endpunkt des Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>, Aufruf mit <code>?action=stats</code>). Die Zahlen kommen live aus dem Google Sheet (über das Apps Script). Falls die Verbindung fehlschlägt, zeigt die Seite ersatzweise Beispieldaten.
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=2"></script>
+<script src="assets/stats-data.js?v=6"></script>
 <script>
-document.getElementById('chart').innerHTML=groupChart(AUFGEWACHSEN_GRUPPEN,i=>DATA.filter(r=>r.aufgewachsen===i),'M','hi');
+initData().then(function(){
+  document.getElementById('chart').innerHTML=groupChart(AUFGEWACHSEN_GRUPPEN,i=>DATA.filter(r=>r.aufgewachsen===i),'M','hi');
+});
 </script>
 </body>
 </html>
