@@ -69,6 +69,8 @@ b,strong{font-weight:500}
 .group .glabel .gap{color:var(--blue);font-weight:500}
 .row{display:flex;align-items:center;gap:12px;margin:9px 0}
 .row .rlabel{width:150px;flex:0 0 auto;font-size:13px;color:var(--grey)}
+.row .rn{display:block;font-size:10.5px;color:var(--hair)}
+.row.low-n .rlabel,.row.low-n .val{color:var(--hair)}
 .row .track{flex:1;height:4px;background:var(--fill);position:relative}
 .row .fill{height:100%}
 .row .val{width:42px;flex:0 0 auto;text-align:right;font-family:var(--display);font-weight:500;font-size:16px}

@@ -169,16 +169,24 @@ async function initData(){
   return DATA;
 }
 
-/* ---------- render helpers ---------- */
-function barRow(label,val,cls){
-  const pct=clamp(val/10*100,0,100);
-  return '<div class="row"><div class="rlabel">'+label+'</div><div class="track"><div class="fill '+cls+'" style="width:'+pct+'%"></div></div><div class="val">'+fmt(val)+'</div></div>';
+/* ---------- render helpers ----------
+   n = wie viele Personen in dieser Gruppe stecken. Wird immer mit angezeigt, weil ein
+   Balken aus z. B. nur einer Person sonst wie ein verlässlicher Durchschnitt aussieht,
+   obwohl er das bei so kleinen Gruppen nicht ist. */
+function barRow(label,val,cls,n){
+  const hasN=n!==undefined&&n!==null;
+  const lowN=hasN&&n>0&&n<3;
+  const noData=hasN&&n===0;
+  const pct=noData?0:clamp(val/10*100,0,100);
+  const nSuffix=hasN?'<span class="rn">n='+n+'</span>':'';
+  const valOut=noData?'–':fmt(val);
+  return '<div class="row'+(lowN?' low-n':'')+'"><div class="rlabel">'+label+nSuffix+'</div><div class="track"><div class="fill '+cls+'" style="width:'+pct+'%"></div></div><div class="val">'+valOut+'</div></div>';
 }
 function groupChart(groups,getSub,dimKey,cls){
   let html='';
   groups.forEach((name,i)=>{
     const sub=getSub(i);
-    html+=barRow(name,mean(sub.map(r=>r[dimKey])),cls);
+    html+=barRow(name,mean(sub.map(r=>r[dimKey])),cls,sub.length);
   });
   return '<div class="group">'+html+'</div>';
 }
