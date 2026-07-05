@@ -290,6 +290,8 @@
     .task-nav a .tn-num{font-size:10px}
     .task-nav a.done .tn-star{font-size:14px}
     .task-nav a.done .tn-num{font-size:7px}
+    /* Überschriften auf Handy-Breite gleich groß wie auf der Stats-Seite (--h-size dort) */
+    .hero h1,.thanks h1,.q-text,.task .q{font-size:clamp(24px,5.4vw,34px)}
   }
   @media print{
     @page{size:10.2cm 15.2cm;margin:0}
@@ -345,18 +347,17 @@
   .q-text,.task .no,.task .q,.dim-block .dim-name{font-size:34px}
 
   #scr-danke.active{display:flex;flex-direction:column;min-height:calc(100vh - 130px)}
-  .thanks{flex:1;text-align:center;display:flex;flex-direction:column;align-items:center;padding:0 16px;min-height:auto}
-  .thanks-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .thanks{flex:1;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;min-height:auto}
+  .thanks .thanks-sub{font-family:var(--mono);font-size:14px;letter-spacing:.05em;color:var(--ink);margin:0 auto 16px;text-transform:none}
   .star-ring{margin-left:auto;margin-right:auto}
   .danke-stars{justify-content:center}
-  .thanks-sub{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--ink);margin:0 auto 24px}
-  .thanks-note{margin:20px auto 0;max-width:44ch;font-size:12px;line-height:1.6;color:var(--ink);text-align:left}
+  .thanks-note{padding:16px 16px 32px;max-width:none;font-size:14px;line-height:1.6;color:var(--ink);text-align:left;text-transform:none;font-family:var(--mono)}
 
   /* Mono: never caps */
   .topbar,.topbar .m-r,.hl-strip .run,.steps div,
   .task .sub,.gate-box .lab,.gate-box .hint,.dim-block .dim-meta,
   .bar .prog,.btn,.toast,.consent-box .c-tag,.tag,
-  .welcome-body .so-fn,.intro-slide .so-fn,.thanks-sub,
+  .welcome-body .so-fn,.intro-slide .so-fn,
   .ms-hint,.ms-tag,.coord-label,.colorlabel-head,.den{text-transform:none}
 
   /* Mono: always black */
@@ -476,17 +477,15 @@
     <!-- DANKE = nach Demographics, vor Profil -->
     <section class="screen" id="scr-danke">
       <div class="thanks">
-        <div class="thanks-main">
-          <div class="star-ring" id="starRing" style="margin-bottom:20px"></div>
-          <h1>Danke</h1>
-          <p class="thanks-sub">Dein europäisches Profil wird erstellt</p>
-          <div class="danke-stars" id="dankeStars">
-            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-          </div>
-          <button class="btn" id="toProfile" style="margin-top:24px;opacity:0;transition:opacity .6s" disabled>Ergebnis anzeigen →</button>
+        <div class="star-ring" id="starRing" style="margin-bottom:12px"></div>
+        <h1>Danke</h1>
+        <p class="thanks-sub">Dein europäisches Profil wird erstellt</p>
+        <div class="danke-stars" id="dankeStars" style="margin-bottom:20px">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
         </div>
-        <p class="thanks-note">Das Ergebnis basiert ausschließlich auf deinen Aufgabenergebnissen — nicht auf deinen persönlichen Angaben oder finanziellen Informationen.</p>
+        <button class="btn" id="toProfile" style="display:none;opacity:0;transition:opacity .6s" disabled>Ergebnis anzeigen →</button>
       </div>
+      <p class="thanks-note">Das Ergebnis basiert ausschließlich auf deinen Aufgabenergebnissen — nicht auf deinen persönlichen Angaben oder finanziellen Informationen.</p>
     </section>
 
     <!-- PART 1 = GRUNDDATEN (jetzt zweiter) -->
@@ -735,8 +734,7 @@
     if(current==='gate'){state.participant=$('#nrInput').value.trim();$('#mNr').textContent=state.participant;show('part2');persistSession();}
     else if(current==='part2'){save(answersRecord());$('#fastFertigOverlay').classList.add('show');persistSession();}
     else if(current==='part1'){save(grunddatenRecord());buildReceipt();show('danke');persistSession();
-      const stars=$('#dankeStars');if(stars){const sp=stars.querySelectorAll('span');sp.forEach((s,i)=>setTimeout(()=>s.classList.add('lit'),i*380));}
-      setTimeout(()=>{const b=$('#toProfile');b.disabled=false;b.style.opacity='1';},2200);}
+      const stars=$('#dankeStars');if(stars){const sp=stars.querySelectorAll('span');sp.forEach((s,i)=>setTimeout(()=>{s.classList.add('lit');if(i===sp.length-1){setTimeout(()=>{stars.style.transition='opacity .35s';stars.style.opacity='0';setTimeout(()=>{stars.style.display='none';const b=$('#toProfile');b.style.display='inline-block';b.disabled=false;requestAnimationFrame(()=>requestAnimationFrame(()=>{b.style.opacity='1';}));},360);},300);}},i*380));}}
   });
 
   /* ---------- gate ---------- */
@@ -986,7 +984,7 @@ for(let i=1;i<=12;i++)h+='<a href="#" data-task="'+i+'" id="tn-'+i+'"><span clas
     return r;}
 
   /* ---------- Google Sheets URL — hier eintragen ---------- */
-  const SHEETS_URL='https://script.google.com/macros/s/AKfycbzkjIWGXAL51Xbb3lYw6egj68X_IpGYQWkNzWo5SmZ3n0hC9WYTBaXNcqfPb_HrFtm1/exec';
+  const SHEETS_URL='https://script.google.com/macros/s/AKfycbyHAYgII0yP0igRNgflyHGbdNR0J1EE67iiHLzNRk5LFL87iOOwwUqvqqvTvl6FUzqy/exec';
 
   /* ---------- session persistence ---------- */
   function persistSession(){
