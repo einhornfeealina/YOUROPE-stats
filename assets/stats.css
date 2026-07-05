@@ -1,0 +1,103 @@
+@font-face{font-family:'Schengen';src:url('../fonts/ABCSchengenATrial-Book.otf') format('opentype');font-weight:400;font-style:normal}
+@font-face{font-family:'Schengen';src:url('../fonts/ABCSchengenATrial-Medium.otf') format('opentype');font-weight:500;font-style:normal}
+@font-face{font-family:'Schengen Mono';src:url('../fonts/ABCSchengenAMonoTrial-Regular.otf') format('opentype');font-weight:400;font-style:normal}
+@font-face{font-family:'Schengen Mono';src:url('../fonts/ABCSchengenAMonoTrial-Medium.otf') format('opentype');font-weight:500;font-style:normal}
+:root{
+  --paper:#FFFFFF;--ink:#000000;--grey:#6E6E68;--hair:#D8D8D2;
+  --blue:#011CF3;--fill:#F1F1EC;
+  --display:"Schengen","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --sans:"Schengen","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"Schengen Mono","IBM Plex Mono",ui-monospace,monospace;
+  --h-size:clamp(24px,5.4vw,34px);
+  --gap-tight:16px;   /* heading → its own body text; line → adjacent row text */
+  --gap-section:32px; /* gap between thematically distinct blocks (e.g. menu sections) */
+}
+/* one shared heading style — hero (landing), pagehead (subpages) and menu headings all match */
+.hero h1,.pagehead h1,.menu-text h3{font-family:var(--display);font-weight:500;font-size:var(--h-size);line-height:1.1;letter-spacing:-.01em;text-transform:uppercase}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--mono);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+b,strong{font-weight:500}
+.app{max-width:760px;margin:0 auto;padding:36px 20px 80px}
+
+/* small back-link, used at the top of individual question pages — same size/position as the menu toggle */
+.backlink{display:flex;align-items:center;gap:12px;padding:18px 0;margin-bottom:var(--gap-section);
+          font-size:15px;letter-spacing:.02em;color:var(--grey);text-decoration:none}
+.backlink:hover{color:var(--ink)}
+.backlink::before{content:"←";color:var(--blue);font-size:20px;font-weight:500}
+
+/* landing hero — the main project question, matches the poster's headline + instruction pairing */
+.hero{padding-bottom:var(--gap-section);border-bottom:1px solid var(--hair);margin-bottom:0}
+.hero .sub{margin-top:var(--gap-tight);font-size:14px;color:var(--ink);line-height:1.65}
+
+/* KPI facts — participants + overall score, then the per-dimension breakdown row */
+.kpis{display:flex;flex-wrap:wrap;margin-top:var(--gap-section)}
+.kpi{flex:1 1 130px;padding:14px 18px 14px 0}
+.kpi .n{font-family:var(--display);font-weight:500;font-size:36px;line-height:1}
+.kpi .l{font-size:13px;color:var(--grey);margin-top:6px}
+.kpis.dims{border-top:1px solid var(--hair);padding-top:var(--gap-tight)}
+.kpis.dims .kpi{flex:1 1 45%}
+.kpis.dims .kpi .n{font-size:28px}
+
+/* classic expandable menu — participants/facts, project description, about us */
+.menu{border-bottom:none;margin-bottom:var(--gap-section)}
+.menu summary{cursor:pointer;list-style:none;padding:18px 0;font-size:15px;letter-spacing:.02em;color:var(--grey);
+              display:flex;align-items:center;gap:12px;-webkit-user-select:none;user-select:none}
+.menu summary::-webkit-details-marker{display:none}
+.menu summary::before{content:"→";color:var(--blue);font-size:20px;font-weight:500;flex:0 0 auto;transition:transform .15s}
+.menu[open] summary::before{transform:rotate(90deg)}
+.menu summary:hover{color:var(--ink)}
+.menu-body{padding-bottom:var(--gap-section)}
+.menu-text{margin-top:var(--gap-section);font-size:14.5px;line-height:1.7}
+.menu-text h3{margin:0 0 var(--gap-tight)}
+.menu-text .note{color:var(--grey)}
+
+/* individual question page title — heading, then everything else flows below as plain text */
+.pagehead{padding-bottom:0;margin-bottom:var(--gap-tight)}
+
+.cell{padding:0 0 30px}
+.cell .sub{font-size:14px;color:var(--ink);margin-bottom:22px;line-height:1.65}
+.cell .finding{margin-top:16px;padding-left:12px;border-left:1px solid var(--blue);font-size:14px;color:var(--ink)}
+.cell .finding b{color:var(--blue)}
+
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+.legend .li{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--grey)}
+.legend .sw{width:16px;height:3px;flex:0 0 auto}
+
+.group{margin-bottom:22px}
+.group:last-child{margin-bottom:0}
+.group .glabel{font-size:14px;color:var(--ink);margin-bottom:9px;display:flex;justify-content:space-between}
+.group .glabel .gap{color:var(--blue);font-weight:500}
+.row{display:flex;align-items:center;gap:12px;margin:9px 0}
+.row .rlabel{width:150px;flex:0 0 auto;font-size:13px;color:var(--grey)}
+.row .track{flex:1;height:4px;background:var(--fill);position:relative}
+.row .fill{height:100%}
+.row .val{width:42px;flex:0 0 auto;text-align:right;font-family:var(--display);font-weight:500;font-size:16px}
+
+.fill.lo{background:repeating-linear-gradient(45deg,var(--hair),var(--hair) 3px,transparent 3px,transparent 6px)}
+.fill.mid{background:var(--grey)}
+.fill.hi{background:var(--ink)}
+.fill.accent{background:var(--blue)}
+
+.toggles{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:20px}
+.toggles button{appearance:none;cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;padding:0 0 4px;
+     font-family:var(--mono);font-size:13.5px;letter-spacing:.02em;color:var(--grey)}
+.toggles button:hover{color:var(--ink)}
+.toggles button.on{color:var(--ink);font-weight:500;border-bottom-color:var(--ink)}
+
+.typegrid{display:flex;flex-direction:column}
+.typecard{display:flex;align-items:center;gap:16px;padding:9px 0;border-bottom:1px solid var(--hair)}
+.typecard:last-child{border-bottom:none}
+.typecard .tn{order:1;flex:1 1 auto;font-size:14px;color:var(--grey)}
+.typecard .tbar{order:2;flex:0 0 130px;height:4px;background:var(--fill)}
+.typecard .tbar i{display:block;height:100%;background:var(--ink)}
+.typecard .tv{order:3;flex:0 0 40px;text-align:right;font-family:var(--display);font-weight:500;font-size:19px}
+
+/* numbered list of every question — matches the printed poster list exactly */
+.qlist{display:flex;flex-direction:column}
+.qlist a{display:flex;align-items:baseline;gap:24px;padding:12px 0;border-bottom:1px solid var(--hair);text-decoration:none;color:var(--ink)}
+.qlist .qi-no{flex:0 0 28px;font-size:14px;color:var(--ink)}
+.qlist .qi-title{flex:1 1 auto;font-size:14px}
+.qlist a:hover .qi-title{color:var(--blue)}
+
+.foot{padding-top:26px;margin-top:10px;font-size:12.5px;color:var(--grey);line-height:1.8}
+.foot code{background:var(--fill);padding:1px 5px}

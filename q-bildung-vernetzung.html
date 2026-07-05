@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUROPE — Bildung &amp; Vernetzung</title>
+<link rel="stylesheet" href="assets/stats.css?v=5">
+</head>
+<body>
+<div class="app">
+    <a class="backlink" href="stats.html">Übersicht</a>
+
+    <div class="pagehead">
+      <h1>Sprechen höher gebildete Menschen mehr europäische Sprachen und haben mehr internationale Kontakte?</h1>
+    </div>
+
+    <div class="cell">
+      <div class="sub">Europäische Vernetzung beschreibt, wie gut jemand mit anderen Menschen und Kulturen in Europa verbunden ist — zum Beispiel über erkannte Fremdsprachen oder Freund*innen in anderen EU-Ländern. Erhoben haben wir das im Workshop unter anderem darüber, wie viele europäische Amtssprachen Teilnehmende erkennen konnten. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert nach höchstem Bildungsabschluss der Teilnehmenden.</div>
+      <div id="chart"></div>
+    </div>
+
+    <div class="foot">
+      Datenquelle (geplant): GET-Endpunkt des bestehenden Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>). Diese Seite zeigt aktuell nur clientseitig erzeugte Zufallsdaten (<code>assets/stats-data.js</code>) zur Abstimmung von Layout und Kennzahlen.
+    </div>
+</div>
+
+<script src="assets/stats-data.js?v=2"></script>
+<script>
+document.getElementById('chart').innerHTML=groupChart(BILDUNG_GRUPPEN,i=>DATA.filter(r=>r.bildung===i),'V','accent');
+</script>
+</body>
+</html>

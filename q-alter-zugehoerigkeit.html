@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUROPE — Alter &amp; Zugehörigkeit</title>
+<link rel="stylesheet" href="assets/stats.css?v=5">
+</head>
+<body>
+<div class="app">
+    <a class="backlink" href="stats.html">Übersicht</a>
+
+    <div class="pagehead">
+      <h1>Fühlen sich jüngere oder ältere Menschen stärker europäisch zugehörig?</h1>
+    </div>
+
+    <div class="cell">
+      <div class="sub">Europäisches Zugehörigkeitsgefühl beschreibt, wie verbunden sich jemand mit Europa fühlt. Erhoben haben wir das im Workshop unter anderem darüber, mit wie vielen europäischen Begriffen sich Teilnehmende identifizieren und welches von sieben Memes ihre Beziehung zu Europa am besten beschreibt — von sehr positiv bis sehr negativ. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert nach Altersgruppe der Teilnehmenden.</div>
+      <div id="chart"></div>
+    </div>
+
+    <div class="foot">
+      Datenquelle (geplant): GET-Endpunkt des bestehenden Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>). Diese Seite zeigt aktuell nur clientseitig erzeugte Zufallsdaten (<code>assets/stats-data.js</code>) zur Abstimmung von Layout und Kennzahlen.
+    </div>
+</div>
+
+<script src="assets/stats-data.js?v=2"></script>
+<script>
+document.getElementById('chart').innerHTML=groupChart(ALTER_GRUPPEN,i=>DATA.filter(r=>r.alter===i),'Z','hi');
+</script>
+</body>
+</html>

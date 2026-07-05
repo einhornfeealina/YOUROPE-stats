@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUROPE — Geschlecht &amp; Teilhabe</title>
+<link rel="stylesheet" href="assets/stats.css?v=5">
+</head>
+<body>
+<div class="app">
+    <a class="backlink" href="stats.html">Übersicht</a>
+
+    <div class="pagehead">
+      <h1>Unterscheidet sich der Wunsch nach politischer Mitbestimmung je nach Geschlecht?</h1>
+    </div>
+
+    <div class="cell">
+      <div class="sub">Politische Teilhabe an Europa beschreibt unter anderem, wie sehr sich jemand wünscht, politisch mitbestimmen zu können — etwa bei Europawahlen. Erhoben haben wir das im Workshop danach, wie stark Teilnehmende diesem Wunsch zustimmen. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert nach dem angegebenen Geschlecht der Teilnehmenden.</div>
+      <div id="chart"></div>
+    </div>
+
+    <div class="foot">
+      Datenquelle (geplant): GET-Endpunkt des bestehenden Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>). Diese Seite zeigt aktuell nur clientseitig erzeugte Zufallsdaten (<code>assets/stats-data.js</code>) zur Abstimmung von Layout und Kennzahlen.
+    </div>
+</div>
+
+<script src="assets/stats-data.js?v=2"></script>
+<script>
+document.getElementById('chart').innerHTML=groupChart(GESCHLECHT_GRUPPEN,i=>DATA.filter(r=>r.geschlecht===i),'T','hi');
+</script>
+</body>
+</html>

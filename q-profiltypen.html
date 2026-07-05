@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUROPE — Profiltypen</title>
+<link rel="stylesheet" href="assets/stats.css?v=5">
+</head>
+<body>
+<div class="app">
+    <a class="backlink" href="stats.html">Übersicht</a>
+
+    <div class="pagehead">
+      <h1>Welcher von 12 möglichen Europa-Typen kommt am häufigsten vor?</h1>
+    </div>
+
+    <div class="cell">
+      <div class="sub">Am Ende des Workshops bekommt jede*r Teilnehmende einen von 12 möglichen „Europa-Typen" zugewiesen — basierend auf den zwei Bereichen (Zugehörigkeit, Möglichkeiten, Vernetzung oder Teilhabe), in denen die Person am stärksten abgeschnitten hat. Hier siehst du, wie oft jeder Typ vorkommt — und über den Filter, ob sich das zwischen wirtschaftlich schwächer und stärker gestellten Teilnehmenden unterscheidet.</div>
+      <div class="toggles" id="typeToggle"></div>
+      <div class="typegrid" id="typeGrid"></div>
+    </div>
+
+    <div class="foot">
+      Datenquelle (geplant): GET-Endpunkt des bestehenden Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>). Diese Seite zeigt aktuell nur clientseitig erzeugte Zufallsdaten (<code>assets/stats-data.js</code>) zur Abstimmung von Layout und Kennzahlen.
+    </div>
+</div>
+
+<script src="assets/stats-data.js?v=2"></script>
+<script>
+initTypeGrid('typeGrid','typeToggle');
+</script>
+</body>
+</html>

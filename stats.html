@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUROPE — Live Statistik (Mockup)</title>
+<link rel="stylesheet" href="assets/stats.css?v=5">
+</head>
+<body>
+<div class="app">
+    <details class="menu">
+      <summary>Über das Projekt, Zahlen &amp; Team</summary>
+      <div class="menu-body">
+        <div class="menu-text">
+          <h3>Über das Projekt</h3>
+          <p>YOUROPE ist eine studentische Datenerhebung zum Thema wirtschaftliche Ungleichheit und europäische Identität. Im Rahmen eines Workshops haben Teilnehmende zunächst zwölf spielerische Aufgaben bearbeitet, die vier Bereiche europäischer Erfahrung messen: wie zugehörig sie sich fühlen, welche Möglichkeiten sie nutzen konnten, wie gut sie vernetzt sind und wie stark sie sich politisch beteiligen (können und wollen). Anschließend haben sie einige persönliche Angaben gemacht — unter anderem zu Alter, Bildung, Einkommen und Vermögen. Diese Seite verknüpft beide Datensätze, um sichtbar zu machen, ob und wie stark die wirtschaftliche und soziale Situation einer Person beeinflusst, wie viel sie von Europa mitbekommt.</p>
+        </div>
+        <div class="kpis" id="factsRow"></div>
+        <div class="kpis dims" id="dimsRow"></div>
+        <div class="menu-text">
+          <h3>Wer wir sind</h3>
+          <p class="note">Platzhalter — hier kommt eine kurze Vorstellung des Projektteams hin: wer ihr seid, im Rahmen welches Kurses/Studiengangs das Projekt entstanden ist, und wie man euch erreichen kann.</p>
+        </div>
+      </div>
+    </details>
+
+    <div class="hero">
+      <h1>Kann sich jede*r Europa leisten?</h1>
+      <div class="sub">Wie viel jemand von Europa mitbekommt — ob man sich zugehörig fühlt, wie viele europäische Möglichkeiten man nutzen konnte, wie gut man vernetzt ist und wie stark man sich politisch beteiligen kann — hängt das von Einkommen, Vermögen und Bildung ab? Genau das zeigen die folgenden Fragen, jede für sich einzeln ausgewertet.</div>
+    </div>
+
+    <div class="qlist" id="qList"></div>
+</div>
+
+<script src="assets/stats-data.js?v=2"></script>
+<script>
+renderFacts('factsRow');
+renderDims('dimsRow');
+renderQuestionList('qList');
+</script>
+</body>
+</html>

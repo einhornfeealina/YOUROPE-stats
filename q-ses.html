@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUROPE — Zugehörigkeit bleibt gleich, der Rest nicht</title>
+<link rel="stylesheet" href="assets/stats.css?v=5">
+</head>
+<body>
+<div class="app">
+    <a class="backlink" href="stats.html">Übersicht</a>
+
+    <div class="pagehead">
+      <h1>Kann sich jede*r Europa leisten?</h1>
+    </div>
+
+    <div class="cell">
+      <div class="sub">Jede*r Teilnehmende hat vier Werte zwischen 0 und 10 bekommen: wie zugehörig sie sich zu Europa fühlen (erhoben u. a. über selbst gewählte europäische Begriffe und ein Meme, das ihr Gefühl zu Europa am besten trifft), wie viele europäische Möglichkeiten sie nutzen konnten (u. a. Reisen innerhalb Europas), wie gut sie europäisch vernetzt sind (u. a. Freund*innen in anderen EU-Ländern, erkannte Fremdsprachen) und wie stark sie sich politisch an Europa beteiligen können und wollen (u. a. Wissen über die EU-Kommission, Wunsch nach Wahlbeteiligung). Für diesen Vergleich haben wir alle Teilnehmenden anhand von Einkommen und Vermögen in drei gleich große Gruppen geteilt: geringerer, mittlerer und höherer Wohlstand.</div>
+      <div class="legend">
+        <div class="li"><span class="sw fill lo"></span> geringerer Wohlstand</div>
+        <div class="li"><span class="sw fill mid"></span> mittlerer Wohlstand</div>
+        <div class="li"><span class="sw fill hi"></span> höherer Wohlstand</div>
+      </div>
+      <div id="thesisChart"></div>
+    </div>
+
+    <div class="foot">
+      Datenquelle (geplant): GET-Endpunkt des bestehenden Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>). Diese Seite zeigt aktuell nur clientseitig erzeugte Zufallsdaten (<code>assets/stats-data.js</code>) zur Abstimmung von Layout und Kennzahlen.
+    </div>
+</div>
+
+<script src="assets/stats-data.js?v=2"></script>
+<script>
+const dims=[{k:'Z',name:'Zugehörigkeit'},{k:'M',name:'Möglichkeiten'},{k:'V',name:'Vernetzung'},{k:'T',name:'Teilhabe'}];
+let html='';
+dims.forEach(d=>{
+  const lo=mean(DATA.filter(r=>r.sesGroup===0).map(r=>r[d.k]));
+  const mid=mean(DATA.filter(r=>r.sesGroup===1).map(r=>r[d.k]));
+  const hi=mean(DATA.filter(r=>r.sesGroup===2).map(r=>r[d.k]));
+  const gap=hi-lo;
+  html+='<div class="group"><div class="glabel"><span>'+d.name+'</span><span class="gap">Δ '+(gap>=0?'+':'')+fmt(gap)+'</span></div>'
+      +barRow('Niedrig',lo,'lo')+barRow('Mittel',mid,'mid')+barRow('Hoch',hi,'hi')+'</div>';
+});
+document.getElementById('thesisChart').innerHTML=html;
+</script>
+</body>
+</html>

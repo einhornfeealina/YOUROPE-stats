@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUROPE — Bildung &amp; Teilhabe</title>
+<link rel="stylesheet" href="assets/stats.css?v=5">
+</head>
+<body>
+<div class="app">
+    <a class="backlink" href="stats.html">Übersicht</a>
+
+    <div class="pagehead">
+      <h1>Wissen höher gebildete Menschen mehr über die EU, und wollen sie deshalb auch mehr mitbestimmen?</h1>
+    </div>
+
+    <div class="cell">
+      <div class="sub">Politische Teilhabe an Europa hat zwei Seiten, die wir im Workshop getrennt voneinander erhoben haben: wie viel jemand über die EU weiß — zum Beispiel wie viele Mitglieder der EU-Kommission oder europäische Grundrechte die Person kennt — und wie sehr sich jemand wünscht, politisch mitbestimmen zu können, etwa bei Europawahlen. Beides ergibt einen eigenen Wert zwischen 0 und 10. Über den Umschalter kannst du beide Werte einzeln ansehen, jeweils nach höchstem Bildungsabschluss der Teilnehmenden.</div>
+      <div class="toggles" id="toggle"></div>
+      <div id="chart"></div>
+    </div>
+
+    <div class="foot">
+      Datenquelle (geplant): GET-Endpunkt des bestehenden Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>). Diese Seite zeigt aktuell nur clientseitig erzeugte Zufallsdaten (<code>assets/stats-data.js</code>) zur Abstimmung von Layout und Kennzahlen.
+    </div>
+</div>
+
+<script src="assets/stats-data.js?v=2"></script>
+<script>
+let mode='wissen';
+function render(){
+  let html='';
+  BILDUNG_GRUPPEN.forEach((name,i)=>{
+    const sub=DATA.filter(r=>r.bildung===i);
+    const val=mean(sub.map(r=>mode==='wissen'?r.Twissen:r.Twollen));
+    html+=barRow(name,val,'hi');
+  });
+  document.getElementById('chart').innerHTML='<div class="group">'+html+'</div>';
+}
+document.getElementById('toggle').innerHTML=
+  '<button data-m="wissen" class="on">Wissen über die EU</button><button data-m="wollen">Wunsch nach Mitbestimmung</button>';
+document.getElementById('toggle').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  mode=b.dataset.m;
+  document.querySelectorAll('#toggle button').forEach(x=>x.classList.toggle('on',x===b));
+  render();
+});
+render();
+</script>
+</body>
+</html>
