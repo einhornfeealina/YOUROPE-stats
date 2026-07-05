@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Zugehörigkeit bleibt gleich, der Rest nicht</title>
-<link rel="stylesheet" href="assets/stats.css?v=5">
+<link rel="stylesheet" href="assets/stats.css?v=6">
 </head>
 <body>
 <div class="app">
@@ -29,18 +29,17 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=6"></script>
+<script src="assets/stats-data.js?v=7"></script>
 <script>
 initData().then(function(){
   const dims=[{k:'Z',name:'Zugehörigkeit'},{k:'M',name:'Möglichkeiten'},{k:'V',name:'Vernetzung'},{k:'T',name:'Teilhabe'}];
   let html='';
   dims.forEach(d=>{
-    const lo=mean(DATA.filter(r=>r.sesGroup===0).map(r=>r[d.k]));
-    const mid=mean(DATA.filter(r=>r.sesGroup===1).map(r=>r[d.k]));
-    const hi=mean(DATA.filter(r=>r.sesGroup===2).map(r=>r[d.k]));
+    const gLo=DATA.filter(r=>r.sesGroup===0), gMid=DATA.filter(r=>r.sesGroup===1), gHi=DATA.filter(r=>r.sesGroup===2);
+    const lo=mean(gLo.map(r=>r[d.k])), mid=mean(gMid.map(r=>r[d.k])), hi=mean(gHi.map(r=>r[d.k]));
     const gap=hi-lo;
     html+='<div class="group"><div class="glabel"><span>'+d.name+'</span><span class="gap">Δ '+(gap>=0?'+':'')+fmt(gap)+'</span></div>'
-        +barRow('Niedrig',lo,'lo')+barRow('Mittel',mid,'mid')+barRow('Hoch',hi,'hi')+'</div>';
+        +barRow('Niedrig',lo,'lo',gLo.length)+barRow('Mittel',mid,'mid',gMid.length)+barRow('Hoch',hi,'hi',gHi.length)+'</div>';
   });
   document.getElementById('thesisChart').innerHTML=html;
 });
