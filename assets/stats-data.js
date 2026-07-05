@@ -6,6 +6,14 @@ const USE_LIVE_DATA=true; // auf false setzen, um immer mit Beispieldaten zu arb
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 function mean(arr){return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;}
 function fmt(n){return n.toFixed(1).replace('.',',');}
+/* Streuung (Stichproben-Standardabweichung) — zeigt, wie weit die Werte einer Gruppe auseinanderliegen.
+   Ab 2 Werten berechenbar; bei weniger gibt's keine sinnvolle Streuung. */
+function std(arr){
+  if(arr.length<2)return 0;
+  const m=mean(arr);
+  const variance=arr.reduce((a,b)=>a+(b-m)*(b-m),0)/(arr.length-1);
+  return Math.sqrt(variance);
+}
 
 /* ---------- Gruppen-Beschriftungen für die Charts ---------- */
 const BILDUNG_GRUPPEN=['Pflichtschule / Ausbildung','Abitur','Bachelor','Master / Promotion'];
@@ -170,23 +178,32 @@ async function initData(){
 }
 
 /* ---------- render helpers ----------
-   n = wie viele Personen in dieser Gruppe stecken. Wird immer mit angezeigt, weil ein
-   Balken aus z. B. nur einer Person sonst wie ein verlässlicher Durchschnitt aussieht,
-   obwohl er das bei so kleinen Gruppen nicht ist. */
-function barRow(label,val,cls,n){
+   n  = wie viele Personen in dieser Gruppe stecken. Wird immer mit angezeigt, weil ein
+        Balken aus z. B. nur einer Person sonst wie ein verlässlicher Durchschnitt aussieht,
+        obwohl er das bei so kleinen Gruppen nicht ist.
+   sd = Streuung (Standardabweichung) innerhalb der Gruppe. Wird als kleine Klammer
+        [Ø−sd … Ø+sd] über dem Balken eingezeichnet, damit man sieht, wie weit die
+        einzelnen Antworten tatsächlich auseinanderliegen — ein Durchschnitt allein
+        verschweigt das. Ab 2 Werten sinnvoll, sonst kein Klammer-Overlay. */
+function barRow(label,val,cls,n,sd){
   const hasN=n!==undefined&&n!==null;
   const lowN=hasN&&n>0&&n<3;
   const noData=hasN&&n===0;
   const pct=noData?0:clamp(val/10*100,0,100);
   const nSuffix=hasN?'<span class="rn">n='+n+'</span>':'';
   const valOut=noData?'–':fmt(val);
-  return '<div class="row'+(lowN?' low-n':'')+'"><div class="rlabel">'+label+nSuffix+'</div><div class="track"><div class="fill '+cls+'" style="width:'+pct+'%"></div></div><div class="val">'+valOut+'</div></div>';
+  let errbar='';
+  if(!noData&&sd&&sd>0&&n>=2){
+    const lo=clamp(val-sd,0,10),hi=clamp(val+sd,0,10);
+    if(hi>lo)errbar='<div class="errbar" style="left:'+(lo/10*100)+'%;width:'+((hi-lo)/10*100)+'%"></div>';
+  }
+  return '<div class="row'+(lowN?' low-n':'')+'"><div class="rlabel">'+label+nSuffix+'</div><div class="track"><div class="fill '+cls+'" style="width:'+pct+'%"></div>'+errbar+'</div><div class="val">'+valOut+'</div></div>';
 }
 function groupChart(groups,getSub,dimKey,cls){
   let html='';
   groups.forEach((name,i)=>{
-    const sub=getSub(i);
-    html+=barRow(name,mean(sub.map(r=>r[dimKey])),cls,sub.length);
+    const vals=getSub(i).map(r=>r[dimKey]);
+    html+=barRow(name,mean(vals),cls,vals.length,std(vals));
   });
   return '<div class="group">'+html+'</div>';
 }

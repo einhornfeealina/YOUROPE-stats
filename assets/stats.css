@@ -75,6 +75,10 @@ b,strong{font-weight:500}
 .row .fill{height:100%}
 .row .val{width:42px;flex:0 0 auto;text-align:right;font-family:var(--display);font-weight:500;font-size:16px}
 
+/* Streuungs-Klammer: zeigt Ø±1 Standardabweichung als kleine Klammer über dem Balken */
+.row .errbar{position:absolute;top:-4px;bottom:-4px;border-left:1px solid var(--ink);border-right:1px solid var(--ink);pointer-events:none}
+.row .errbar::before{content:'';position:absolute;top:50%;left:0;right:0;border-top:1px solid var(--ink);transform:translateY(-50%)}
+
 .fill.lo{background:repeating-linear-gradient(45deg,var(--hair),var(--hair) 3px,transparent 3px,transparent 6px)}
 .fill.mid{background:var(--grey)}
 .fill.hi{background:var(--ink)}
