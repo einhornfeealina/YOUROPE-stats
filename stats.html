@@ -32,11 +32,13 @@
     <div class="qlist" id="qList"></div>
 </div>
 
-<script src="assets/stats-data.js?v=2"></script>
+<script src="assets/stats-data.js?v=6"></script>
 <script>
-renderFacts('factsRow');
-renderDims('dimsRow');
 renderQuestionList('qList');
+initData().then(function(){
+  renderFacts('factsRow');
+  renderDims('dimsRow');
+});
 </script>
 </body>
 </html>
