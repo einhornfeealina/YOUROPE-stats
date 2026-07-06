@@ -268,7 +268,7 @@ const QUESTIONS=[
   {href:'q-ses.html',cat:'Hauptfrage',title:'Kann sich jede*r Europa leisten?'},
   {href:'q-staatsangehoerigkeit.html',cat:'Zugehörigkeit',title:'Fühlen sich Menschen mit mehreren Staatsangehörigkeiten europäischer als Menschen mit nur einer?'},
   {href:'q-alter-zugehoerigkeit.html',cat:'Zugehörigkeit',title:'Fühlen sich jüngere oder ältere Menschen stärker europäisch zugehörig?'},
-  {href:'q-einkommen.html',cat:'Möglichkeiten',title:'Leisten sich Menschen mit höherem Einkommen mehr von Europa leisten?'},
+  {href:'q-einkommen.html',cat:'Möglichkeiten',title:'Leisten sich Menschen mit höherem Einkommen mehr von Europa?'},
   {href:'q-aufgewachsen.html',cat:'Möglichkeiten',title:'Haben Menschen, die in der Stadt aufgewachsen sind, mehr europäische Möglichkeiten als Menschen vom Land?'},
   {href:'q-vermoegen.html',cat:'Vernetzung',title:'Sorgt Vermögen aus der Familie für mehr internationale Kontakte, auch ohne eigenes Einkommen?'},
   {href:'q-bildung-vernetzung.html',cat:'Vernetzung',title:'Sprechen höher gebildete Menschen mehr europäische Sprachen und haben mehr internationale Kontakte?'},
