@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YOUROPE — Einkommen &amp; Möglichkeiten</title>
+<title>YOUROPE — Staatsangehörigkeit &amp; Wahlrecht</title>
 <link rel="stylesheet" href="assets/stats.css?v=8">
 </head>
 <body>
@@ -11,11 +11,11 @@
     <a class="backlink" href="stats.html">Übersicht</a>
 
     <div class="pagehead">
-      <h1>Können sich Menschen mit höherem Einkommen mehr von Europa leisten, zum Beispiel Reisen?</h1>
+      <h1>Fühlen sich Menschen mit mehreren Staatsangehörigkeiten auch politisch stärker berechtigt?</h1>
     </div>
 
     <div class="cell">
-      <div class="sub">Europäische Möglichkeiten beschreiben, wie viel jemand von den Angeboten und Freiheiten der EU im Alltag tatsächlich nutzen konnte — zum Beispiel Reisen innerhalb Europas. Erhoben haben wir das im Workshop unter anderem darüber, wie oft und wohin Teilnehmende innerhalb Europas gereist sind. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert nach monatlichem Nettoeinkommen der Teilnehmenden.</div>
+      <div class="sub">Ein Teil der politischen Teilhabe an Europa ist die Selbsteinschätzung, wie sehr man an Wahlen teilnehmen darf. Erhoben haben wir das im Workshop darüber, wie stark Teilnehmende der Aussage „Ich darf an Wahlen teilnehmen" zustimmen. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert zwischen Teilnehmenden mit einer und mit mehreren Staatsangehörigkeiten.</div>
       <div class="toggles" id="genderToggle"></div>
       <div id="chart"></div>
     </div>
@@ -28,7 +28,7 @@
 <script src="assets/stats-data.js?v=9"></script>
 <script>
 initData().then(function(){
-  initGroupToggle('genderToggle','chart',EINKOMMEN_GRUPPEN,i=>DATA.filter(r=>r.einkommen===i),'M','hi');
+  initGroupToggle('genderToggle','chart',STAAT_GRUPPEN,i=>DATA.filter(r=>r.staat===i),'Tdarf','hi');
 });
 </script>
 </body>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Vermögen &amp; Vernetzung</title>
-<link rel="stylesheet" href="assets/stats.css?v=5">
+<link rel="stylesheet" href="assets/stats.css?v=8">
 </head>
 <body>
 <div class="app">
@@ -16,8 +16,8 @@
 
     <div class="cell">
       <div class="sub">Europäische Vernetzung beschreibt, wie gut jemand mit anderen Menschen und Kulturen in Europa verbunden ist — zum Beispiel über Freund*innen in anderen EU-Ländern oder erkannte Fremdsprachen. Erhoben haben wir das im Workshop unter anderem darüber, wie viele europäische Amtssprachen Teilnehmende erkennen konnten. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert danach, ob die Familie der Teilnehmenden Immobilien oder anderes Vermögen besitzt — unabhängig davon, wie viel die Teilnehmenden selbst gerade verdienen.</div>
+      <div class="toggles" id="genderToggle"></div>
       <div id="chart"></div>
-      <div class="finding"><b>Auffällig:</b> Auch Teilnehmende mit niedrigem eigenen Einkommen (z. B. Studierende) zeigen einen hohen Vernetzungs-Wert, wenn die Familie vermögend ist — ein Hinweis darauf, dass sich Ungleichheit über Generationen weitergibt, statt nur im Moment zu entstehen.</div>
     </div>
 
     <div class="foot">
@@ -25,10 +25,10 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=6"></script>
+<script src="assets/stats-data.js?v=9"></script>
 <script>
 initData().then(function(){
-  document.getElementById('chart').innerHTML=groupChart(VERMOEGEN_GRUPPEN,i=>DATA.filter(r=>r.vermoegen===i),'V','accent');
+  initGroupToggle('genderToggle','chart',VERMOEGEN_GRUPPEN,i=>DATA.filter(r=>r.vermoegen===i),'V','hi');
 });
 </script>
 </body>

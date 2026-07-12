@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Zugehörigkeit bleibt gleich, der Rest nicht</title>
-<link rel="stylesheet" href="assets/stats.css?v=7">
+<link rel="stylesheet" href="assets/stats.css?v=8">
 </head>
 <body>
 <div class="app">
@@ -21,6 +21,7 @@
         <div class="li"><span class="sw fill mid"></span> mittlerer Wohlstand</div>
         <div class="li"><span class="sw fill hi"></span> höherer Wohlstand</div>
       </div>
+      <div class="toggles" id="genderToggle"></div>
       <div id="thesisChart"></div>
     </div>
 
@@ -29,21 +30,32 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=8"></script>
+<script src="assets/stats-data.js?v=9"></script>
 <script>
 initData().then(function(){
   const dims=[{k:'Z',name:'Zugehörigkeit'},{k:'M',name:'Möglichkeiten'},{k:'V',name:'Vernetzung'},{k:'T',name:'Teilhabe'}];
-  let html='';
-  dims.forEach(d=>{
-    const vLo=DATA.filter(r=>r.sesGroup===0).map(r=>r[d.k]);
-    const vMid=DATA.filter(r=>r.sesGroup===1).map(r=>r[d.k]);
-    const vHi=DATA.filter(r=>r.sesGroup===2).map(r=>r[d.k]);
-    const lo=mean(vLo), mid=mean(vMid), hi=mean(vHi);
-    const gap=hi-lo;
-    html+='<div class="group"><div class="glabel"><span>'+d.name+'</span><span class="gap">Δ '+(gap>=0?'+':'')+fmt(gap)+'</span></div>'
-        +barRow('Niedrig',lo,'lo',vLo.length,std(vLo))+barRow('Mittel',mid,'mid',vMid.length,std(vMid))+barRow('Hoch',hi,'hi',vHi.length,std(vHi))+'</div>';
+  function render(genderFilter){
+    const base=genderFilter==='alle'?DATA:DATA.filter(r=>r.geschlecht===(genderFilter==='m'?0:1));
+    let html='';
+    dims.forEach(d=>{
+      const vLo=base.filter(r=>r.sesGroup===0).map(r=>r[d.k]);
+      const vMid=base.filter(r=>r.sesGroup===1).map(r=>r[d.k]);
+      const vHi=base.filter(r=>r.sesGroup===2).map(r=>r[d.k]);
+      const lo=mean(vLo), mid=mean(vMid), hi=mean(vHi);
+      const gap=hi-lo;
+      html+='<div class="group"><div class="glabel"><span>'+d.name+'</span><span class="gap">Δ '+(gap>=0?'+':'')+fmt(gap)+'</span></div>'
+          +barRow('Niedrig',lo,'lo',vLo.length,std(vLo))+barRow('Mittel',mid,'mid',vMid.length,std(vMid))+barRow('Hoch',hi,'hi',vHi.length,std(vHi))+'</div>';
+    });
+    document.getElementById('thesisChart').innerHTML=html;
+  }
+  document.getElementById('genderToggle').innerHTML=
+    '<button data-g="alle" class="on">Alle</button><button data-g="m">Männlich</button><button data-g="w">Weiblich</button>';
+  document.getElementById('genderToggle').addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    document.querySelectorAll('#genderToggle button').forEach(x=>x.classList.toggle('on',x===b));
+    render(b.dataset.g);
   });
-  document.getElementById('thesisChart').innerHTML=html;
+  render('alle');
 });
 </script>
 </body>

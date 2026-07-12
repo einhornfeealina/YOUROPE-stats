@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YOUROPE — Einkommen &amp; Möglichkeiten</title>
+<title>YOUROPE — Einkommen &amp; gemeinsame Ressource</title>
 <link rel="stylesheet" href="assets/stats.css?v=8">
 </head>
 <body>
@@ -11,11 +11,11 @@
     <a class="backlink" href="stats.html">Übersicht</a>
 
     <div class="pagehead">
-      <h1>Können sich Menschen mit höherem Einkommen mehr von Europa leisten, zum Beispiel Reisen?</h1>
+      <h1>Nehmen sich Menschen mit höherem Einkommen weniger von einer gemeinsam genutzten Ressource?</h1>
     </div>
 
     <div class="cell">
-      <div class="sub">Europäische Möglichkeiten beschreiben, wie viel jemand von den Angeboten und Freiheiten der EU im Alltag tatsächlich nutzen konnte — zum Beispiel Reisen innerhalb Europas. Erhoben haben wir das im Workshop unter anderem darüber, wie oft und wohin Teilnehmende innerhalb Europas gereist sind. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert nach monatlichem Nettoeinkommen der Teilnehmenden.</div>
+      <div class="sub">Bei einer Aufgabe im Workshop lag ein begrenzter Stapel an Zetteln bereit, von denen sich Teilnehmende frei bedienen konnten — jede*r durfte sich nehmen, wie viele sie wollten. Daraus ergibt sich ein Wert zwischen 0 und 10, wobei ein hoher Wert bedeutet, dass sich jemand eher zurückgehalten hat. Hier vergleichen wir diesen Wert nach monatlichem Nettoeinkommen der Teilnehmenden.</div>
       <div class="toggles" id="genderToggle"></div>
       <div id="chart"></div>
     </div>
@@ -28,7 +28,7 @@
 <script src="assets/stats-data.js?v=9"></script>
 <script>
 initData().then(function(){
-  initGroupToggle('genderToggle','chart',EINKOMMEN_GRUPPEN,i=>DATA.filter(r=>r.einkommen===i),'M','hi');
+  initGroupToggle('genderToggle','chart',EINKOMMEN_GRUPPEN,i=>DATA.filter(r=>r.einkommen===i),'Tgrundgesetz','hi');
 });
 </script>
 </body>
