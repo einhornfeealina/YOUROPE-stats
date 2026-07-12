@@ -47,8 +47,10 @@ function generateDummyData(n){
     const Twollen=clamp(gauss(6.2,1.6),0,10);
     const Tgeschl=clamp(gauss(0,0.8)+(geschlecht===1?-0.6:0),-2,2);
     const T=clamp((Twissen+Twollen)/2+Tgeschl,0,10);
+    const Tdarf=clamp(gauss(5.5+staat*1.5,1.8),0,10);
+    const Tgrundgesetz=clamp(gauss(8-((bildung+einkommen)/2)*1.5,1.8),0,10);
 
-    rows.push({bildung,einkommen,vermoegen,staat,alter,aufgewachsen,geschlecht,Z,M,V,T,Twissen,Twollen});
+    rows.push({bildung,einkommen,vermoegen,staat,alter,aufgewachsen,geschlecht,Z,M,V,T,Twissen,Twollen,Tdarf,Tgrundgesetz});
   }
   return rows;
 }
@@ -92,7 +94,9 @@ function computeParticipantScores(row){
   const T=meanSkipNull([T01,T02,T03]);
   const Twissen=meanSkipNull([T01,T02]);
   const Twollen=(row.T03_y!==undefined&&row.T03_y!=='')?clamp(Number(row.T03_y),0,5)/5*10:0;
-  return {Z,M,V,T,Twissen,Twollen};
+  const Tdarf=(row.T03_x!==undefined&&row.T03_x!=='')?clamp(Number(row.T03_x),0,5)/5*10:null;
+  const Tgrundgesetz=T02;
+  return {Z,M,V,T,Twissen,Twollen,Tdarf,Tgrundgesetz};
 }
 
 /* ---------- Grunddaten-Antworten → Gruppen-Index (muss zu QUESTIONS in index.html passen) ---------- */
@@ -202,10 +206,30 @@ function barRow(label,val,cls,n,sd){
 function groupChart(groups,getSub,dimKey,cls){
   let html='';
   groups.forEach((name,i)=>{
-    const vals=getSub(i).map(r=>r[dimKey]);
+    const vals=getSub(i).map(r=>r[dimKey]).filter(v=>v!==null&&v!==undefined&&!isNaN(v));
     html+=barRow(name,mean(vals),cls,vals.length,std(vals));
   });
   return '<div class="group">'+html+'</div>';
+}
+
+/* ---------- optionaler Geschlechts-Filter über einem Gruppen-Chart ----------
+   Baut Alle/Männlich/Weiblich-Buttons und filtert die Datengrundlage vor dem
+   Rendern des Charts. getSubBase(i) liefert wie gewohnt die Grunddaten je
+   Gruppen-Index, ungefiltert nach Geschlecht. */
+function initGroupToggle(toggleId,chartId,groups,getSubBase,dimKey,cls){
+  const opts=[{k:'alle',l:'Alle',f:()=>true},{k:'m',l:'Männlich',f:r=>r.geschlecht===0},{k:'w',l:'Weiblich',f:r=>r.geschlecht===1}];
+  function render(k){
+    const f=opts.find(o=>o.k===k).f;
+    document.getElementById(chartId).innerHTML=groupChart(groups,i=>getSubBase(i).filter(f),dimKey,cls);
+  }
+  document.getElementById(toggleId).innerHTML=opts.map((o,i)=>
+    '<button data-k="'+o.k+'"'+(i===0?' class="on"':'')+'>'+o.l+'</button>').join('');
+  document.getElementById(toggleId).addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    document.querySelectorAll('#'+toggleId+' button').forEach(x=>x.classList.toggle('on',x===b));
+    render(b.dataset.k);
+  });
+  render('alle');
 }
 
 /* ---------- key-facts row (Teilnehmende + Gesamt-Index) ---------- */
@@ -236,18 +260,23 @@ function typeKeyFor(r){
   const sorted=dims.map((d,i)=>Object.assign({},d,{i})).sort((a,b)=>(b.v-a.v)||(a.i-b.i));
   return sorted[0].k+sorted[1].k;
 }
-function initTypeGrid(gridId,toggleId){
+function initTypeGrid(gridId,toggleId,genderToggleId){
   let typeFilter='alle';
+  let genderFilter='alle';
   function countsFor(filterFn){
     const c={};TYPEN_KEYS.forEach(k=>c[k]=0);
     DATA.filter(filterFn).forEach(r=>{const k=typeKeyFor(r);c[k]=(c[k]||0)+1;});
     return TYPEN_KEYS.map(k=>c[k]);
   }
   function render(){
-    let counts;
-    if(typeFilter==='alle')counts=countsFor(()=>true);
-    else if(typeFilter==='niedrig')counts=countsFor(r=>r.sesGroup===0);
-    else counts=countsFor(r=>r.sesGroup===2);
+    const f=r=>{
+      if(typeFilter==='niedrig'&&r.sesGroup!==0)return false;
+      if(typeFilter==='hoch'&&r.sesGroup!==2)return false;
+      if(genderFilter==='m'&&r.geschlecht!==0)return false;
+      if(genderFilter==='w'&&r.geschlecht!==1)return false;
+      return true;
+    };
+    const counts=countsFor(f);
     const max=Math.max(...counts,1);
     document.getElementById(gridId).innerHTML=TYPEN.map((t,i)=>
       '<div class="typecard"><div class="tn">'+t+'</div><div class="tv">'+counts[i]+'</div><div class="tbar"><i style="width:'+(counts[i]/max*100)+'%"></i></div></div>').join('');
@@ -260,15 +289,27 @@ function initTypeGrid(gridId,toggleId){
     document.querySelectorAll('#'+toggleId+' button').forEach(x=>x.classList.toggle('on',x===b));
     render();
   });
+  if(genderToggleId){
+    document.getElementById(genderToggleId).innerHTML=
+      '<button data-g="alle" class="on">Alle</button><button data-g="m">Männlich</button><button data-g="w">Weiblich</button>';
+    document.getElementById(genderToggleId).addEventListener('click',e=>{
+      const b=e.target.closest('button');if(!b)return;
+      genderFilter=b.dataset.g;
+      document.querySelectorAll('#'+genderToggleId+' button').forEach(x=>x.classList.toggle('on',x===b));
+      render();
+    });
+  }
   render();
 }
 
 /* ---------- die 10 einzelnen Fragen — jede hat ihre eigene q-*.html-Detailseite ---------- */
 const QUESTIONS=[
   {href:'q-ses.html',cat:'Hauptfrage',title:'Kann sich jede*r Europa leisten?'},
+  {href:'q-staat-wahlrecht.html',cat:'Teilhabe',title:'Fühlen sich Menschen mit mehreren Staatsangehörigkeiten auch politisch stärker berechtigt?'},
+  {href:'q-einkommen-ressource.html',cat:'Teilhabe',title:'Nehmen sich Menschen mit höherem Einkommen weniger von einer gemeinsam genutzten Ressource?'},
   {href:'q-staatsangehoerigkeit.html',cat:'Zugehörigkeit',title:'Fühlen sich Menschen mit mehreren Staatsangehörigkeiten europäischer als Menschen mit nur einer?'},
   {href:'q-alter-zugehoerigkeit.html',cat:'Zugehörigkeit',title:'Fühlen sich jüngere oder ältere Menschen stärker europäisch zugehörig?'},
-  {href:'q-einkommen.html',cat:'Möglichkeiten',title:'Leisten sich Menschen mit höherem Einkommen mehr von Europa?'},
+  {href:'q-einkommen.html',cat:'Möglichkeiten',title:'Können sich Menschen mit höherem Einkommen mehr von Europa leisten, zum Beispiel Reisen?'},
   {href:'q-aufgewachsen.html',cat:'Möglichkeiten',title:'Haben Menschen, die in der Stadt aufgewachsen sind, mehr europäische Möglichkeiten als Menschen vom Land?'},
   {href:'q-vermoegen.html',cat:'Vernetzung',title:'Sorgt Vermögen aus der Familie für mehr internationale Kontakte, auch ohne eigenes Einkommen?'},
   {href:'q-bildung-vernetzung.html',cat:'Vernetzung',title:'Sprechen höher gebildete Menschen mehr europäische Sprachen und haben mehr internationale Kontakte?'},
