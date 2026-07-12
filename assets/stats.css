@@ -63,6 +63,9 @@ b,strong{font-weight:500}
 .legend .li{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--grey)}
 .legend .sw{width:16px;height:3px;flex:0 0 auto}
 
+/* short, standalone explanation of a chart symbol (e.g. Δ) — sits right next to what it explains */
+.hint{font-size:12.5px;color:var(--grey);line-height:1.6;margin-bottom:20px}
+
 .group{margin-bottom:22px}
 .group:last-child{margin-bottom:0}
 .group .glabel{font-size:14px;color:var(--ink);margin-bottom:9px;display:flex;justify-content:space-between}
