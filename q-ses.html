@@ -15,7 +15,7 @@
     </div>
 
     <div class="cell">
-      <div class="sub">Jede*r Teilnehmende hat vier Werte zwischen 0 und 10 bekommen: wie zugehörig sie sich zu Europa fühlen (erhoben u. a. über selbst gewählte europäische Begriffe und ein Meme, das ihr Gefühl zu Europa am besten trifft), wie viele europäische Möglichkeiten sie nutzen konnten (u. a. Reisen innerhalb Europas), wie gut sie europäisch vernetzt sind (u. a. Freund*innen in anderen EU-Ländern, erkannte Fremdsprachen) und wie stark sie sich politisch an Europa beteiligen können und wollen (u. a. Wissen über die EU-Kommission, Wunsch nach Wahlbeteiligung). Für diesen Vergleich haben wir alle Teilnehmenden anhand von Einkommen und Vermögen in drei gleich große Gruppen geteilt: geringerer, mittlerer und höherer Wohlstand.</div>
+      <div class="sub">Jede*r Teilnehmende hat vier Werte zwischen 0 und 10 bekommen: wie zugehörig sie sich zu Europa fühlen (erhoben u. a. über selbst gewählte europäische Begriffe und ein Meme, das ihr Gefühl zu Europa am besten trifft), wie viele europäische Möglichkeiten sie nutzen konnten (u. a. Reisen innerhalb Europas), wie gut sie europäisch vernetzt sind (u. a. Freund*innen in anderen EU-Ländern, erkannte Fremdsprachen) und wie stark sie sich politisch an Europa beteiligen können und wollen (u. a. Wissen über die EU-Kommission, Wunsch nach Wahlbeteiligung). Für diesen Vergleich haben wir alle Teilnehmenden anhand von Einkommen und Vermögen in drei gleich große Gruppen geteilt: geringerer, mittlerer und höherer Wohlstand. Die blaue Δ-Zahl über jeder Dimension zeigt den Abstand zwischen geringerem und höherem Wohlstand in Punkten — je größer die Zahl, desto stärker hängt diese Dimension mit Wohlstand zusammen.</div>
       <div class="legend">
         <div class="li"><span class="sw fill lo"></span> geringerer Wohlstand</div>
         <div class="li"><span class="sw fill mid"></span> mittlerer Wohlstand</div>
@@ -30,11 +30,11 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=10"></script>
+<script src="assets/stats-data.js?v=11"></script>
 <script>
 initData().then(function(){
   const dims=[{k:'Z',name:'Zugehörigkeit'},{k:'M',name:'Möglichkeiten'},{k:'V',name:'Vernetzung'},{k:'T',name:'Teilhabe'}];
-  const facets=[FACET_GESCHLECHT,FACET_AUFGEWACHSEN];
+  const facets=[FACET_GESCHLECHT,FACET_BILDUNG,FACET_ALTER,FACET_AUFGEWACHSEN];
   const state={};
   facets.forEach(f=>state[f.key]=new Set());
   function render(){
