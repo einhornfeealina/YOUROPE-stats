@@ -219,6 +219,11 @@ function groupChart(groups,getSub,dimKey,cls){
 const FACET_GESCHLECHT={key:'geschlecht',label:'Geschlecht',options:[{v:0,l:'Männlich'},{v:1,l:'Weiblich'},{v:2,l:'Divers'},{v:3,l:'Sonstiges'}]};
 const FACET_AUFGEWACHSEN={key:'aufgewachsen',label:'Aufgewachsen',options:[{v:0,l:'Dorf'},{v:1,l:'Kleinstadt'},{v:2,l:'Mittelstadt'},{v:3,l:'Großstadt'}]};
 const FACET_WOHLSTAND={key:'sesGroup',label:'Wohlstand',options:[{v:0,l:'Geringer'},{v:1,l:'Mittlerer'},{v:2,l:'Höherer'}]};
+const FACET_BILDUNG={key:'bildung',label:'Bildung',options:[{v:0,l:'Pflicht/Ausbildung'},{v:1,l:'Abitur'},{v:2,l:'Bachelor'},{v:3,l:'Master/Promotion'}]};
+const FACET_EINKOMMEN={key:'einkommen',label:'Einkommen',options:[{v:0,l:'< 1.000 €'},{v:1,l:'1.000–2.499 €'},{v:2,l:'2.500–4.999 €'},{v:3,l:'5.000 €+'}]};
+const FACET_VERMOEGEN={key:'vermoegen',label:'Vermögen (Familie)',options:[{v:0,l:'Kein Vermögen'},{v:1,l:'Immobilien/Vermögen'},{v:2,l:'Beides'}]};
+const FACET_ALTER={key:'alter',label:'Alter',options:[{v:0,l:'unter 25'},{v:1,l:'25–34'},{v:2,l:'35–49'},{v:3,l:'50+'}]};
+const FACET_STAAT={key:'staat',label:'Staatsangehörigkeit',options:[{v:0,l:'1 Staat'},{v:1,l:'2 oder mehr'}]};
 
 function renderFilterPanelHTML(facets){
   if(!facets||!facets.length)return '';
@@ -289,7 +294,7 @@ function typeKeyFor(r){
   return sorted[0].k+sorted[1].k;
 }
 function initTypeGrid(gridId,panelId){
-  const facets=[FACET_WOHLSTAND,FACET_GESCHLECHT,FACET_AUFGEWACHSEN];
+  const facets=[FACET_WOHLSTAND,FACET_GESCHLECHT,FACET_AUFGEWACHSEN,FACET_BILDUNG];
   const state={};
   facets.forEach(f=>state[f.key]=new Set());
   function countsFor(filterFn){
