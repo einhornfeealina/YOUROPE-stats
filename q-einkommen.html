@@ -21,14 +21,15 @@
     </div>
 
     <div class="foot">
+      <b>n</b> zeigt, wie viele Personen in dieser Gruppe stecken — bei sehr wenigen (unter 3) ist der Balken deshalb blass, weil ein Durchschnitt aus so wenigen Antworten wenig verlässlich ist. Die kleine Klammer über dem Balken zeigt die Streuung: wie weit die einzelnen Antworten in dieser Gruppe tatsächlich auseinanderliegen.<br><br>
       Datenquelle: GET-Endpunkt des Apps Script (<code>SHEETS_URL</code> aus <code>index.html</code>, Aufruf mit <code>?action=stats</code>). Die Zahlen kommen live aus dem Google Sheet (über das Apps Script). Falls die Verbindung fehlschlägt, zeigt die Seite ersatzweise Beispieldaten.
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=10"></script>
+<script src="assets/stats-data.js?v=11"></script>
 <script>
 initData().then(function(){
-  initGroupFilter('filterPanel','chart',EINKOMMEN_GRUPPEN,i=>DATA.filter(r=>r.einkommen===i),'M','hi',[FACET_GESCHLECHT,FACET_AUFGEWACHSEN]);
+  initGroupFilter('filterPanel','chart',EINKOMMEN_GRUPPEN,i=>DATA.filter(r=>r.einkommen===i),'M','hi',[FACET_GESCHLECHT,FACET_VERMOEGEN,FACET_AUFGEWACHSEN,FACET_ALTER]);
 });
 </script>
 </body>
