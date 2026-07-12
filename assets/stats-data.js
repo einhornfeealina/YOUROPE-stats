@@ -306,7 +306,7 @@ function initTypeGrid(gridId,toggleId,genderToggleId){
 const QUESTIONS=[
   {href:'q-ses.html',cat:'Hauptfrage',title:'Kann sich jede*r Europa leisten?'},
   {href:'q-staat-wahlrecht.html',cat:'Teilhabe',title:'Fühlen sich Menschen mit mehreren Staatsangehörigkeiten auch politisch stärker berechtigt?'},
-  {href:'q-einkommen-ressource.html',cat:'Teilhabe',title:'Nehmen sich Menschen mit höherem Einkommen weniger von einer gemeinsam genutzten Ressource?'},
+  {href:'q-einkommen-ressource.html',cat:'Teilhabe',title:'Fühlen sich Menschen mit höherem Einkommen sicherer, dass ihre Grundrechte bereits gelten?'},
   {href:'q-staatsangehoerigkeit.html',cat:'Zugehörigkeit',title:'Fühlen sich Menschen mit mehreren Staatsangehörigkeiten europäischer als Menschen mit nur einer?'},
   {href:'q-alter-zugehoerigkeit.html',cat:'Zugehörigkeit',title:'Fühlen sich jüngere oder ältere Menschen stärker europäisch zugehörig?'},
   {href:'q-einkommen.html',cat:'Möglichkeiten',title:'Können sich Menschen mit höherem Einkommen mehr von Europa leisten, zum Beispiel Reisen?'},
