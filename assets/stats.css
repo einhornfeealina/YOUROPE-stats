@@ -89,6 +89,23 @@ b,strong{font-weight:500}
 .toggles button:hover{color:var(--ink)}
 .toggles button.on{color:var(--ink);font-weight:500;border-bottom-color:var(--ink)}
 
+/* collapsible filter panel — checkboxes, combinable across facets, layered over a chart */
+.filterpanel{margin-bottom:20px}
+.filterpanel summary{cursor:pointer;list-style:none;padding:6px 0;font-size:13.5px;letter-spacing:.02em;color:var(--grey);
+              display:flex;align-items:center;gap:10px;-webkit-user-select:none;user-select:none}
+.filterpanel summary::-webkit-details-marker{display:none}
+.filterpanel summary::before{content:"→";color:var(--blue);font-size:16px;font-weight:500;flex:0 0 auto;transition:transform .15s}
+.filterpanel[open] summary::before{transform:rotate(90deg)}
+.filterpanel summary:hover{color:var(--ink)}
+.filter-body{padding:10px 0 4px 26px}
+.filtergroup{margin-bottom:14px}
+.filtergroup:last-child{margin-bottom:0}
+.filtergroup .fl{display:block;font-size:11px;color:var(--grey);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.fchk{display:inline-flex;align-items:center;gap:6px;margin:0 18px 8px 0;font-size:13.5px;color:var(--ink);cursor:pointer;-webkit-user-select:none;user-select:none}
+.fchk input{appearance:none;width:13px;height:13px;border:1px solid var(--grey);flex:0 0 auto;cursor:pointer;position:relative;margin:0}
+.fchk input:checked{background:var(--ink);border-color:var(--ink)}
+.fchk input:checked::after{content:'';position:absolute;left:3px;top:0;width:4px;height:8px;border:solid var(--paper);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+
 .typegrid{display:flex;flex-direction:column}
 .typecard{display:flex;align-items:center;gap:16px;padding:9px 0;border-bottom:1px solid var(--hair)}
 .typecard:last-child{border-bottom:none}

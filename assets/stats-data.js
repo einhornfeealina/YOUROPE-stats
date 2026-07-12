@@ -22,7 +22,7 @@ const VERMOEGEN_GRUPPEN=['Kein Vermögen','Immobilien oder Vermögen','Beides'];
 const STAAT_GRUPPEN=['1 Staatsangehörigkeit','2 oder mehr'];
 const ALTER_GRUPPEN=['unter 25','25–34','35–49','50+'];
 const AUFGEWACHSEN_GRUPPEN=['Dorf','Kleinstadt','Mittelstadt','Großstadt'];
-const GESCHLECHT_GRUPPEN=['Männlich','Weiblich','Divers / Sonstiges'];
+const GESCHLECHT_GRUPPEN=['Männlich','Weiblich','Divers','Sonstiges'];
 
 /* ---------- deterministic dummy data — Fallback, falls die Live-Daten nicht erreichbar sind ---------- */
 function seededRandom(seed){let s=seed;return()=>{s=(s*16807)%2147483647;return(s-1)/2147483646;};}
@@ -38,7 +38,7 @@ function generateDummyData(n){
     const staat=Math.floor(rnd()*2);
     const alter=Math.floor(rnd()*4);
     const aufgewachsen=Math.floor(rnd()*4);
-    const geschlecht=Math.floor(rnd()*3);
+    const geschlecht=Math.floor(rnd()*4);
 
     const Z=clamp(gauss(6.4+staat*0.5,1.3),0,10);
     const M=clamp(gauss(2.8+einkommen*1.55+aufgewachsen*0.3,1.1),0,10);
@@ -126,7 +126,7 @@ function mapAufgewachsen(v){
   return m.hasOwnProperty(v)?m[v]:null;
 }
 function mapGeschlecht(v){
-  const m={'Männlich':0,'Weiblich':1,'Divers':2,'Sonstiges / eigene Bezeichnung':2};
+  const m={'Männlich':0,'Weiblich':1,'Divers':2,'Sonstiges / eigene Bezeichnung':3};
   return m.hasOwnProperty(v)?m[v]:null;
 }
 function mapStaat(v){
@@ -212,24 +212,52 @@ function groupChart(groups,getSub,dimKey,cls){
   return '<div class="group">'+html+'</div>';
 }
 
-/* ---------- optionaler Geschlechts-Filter über einem Gruppen-Chart ----------
-   Baut Alle/Männlich/Weiblich-Buttons und filtert die Datengrundlage vor dem
-   Rendern des Charts. getSubBase(i) liefert wie gewohnt die Grunddaten je
-   Gruppen-Index, ungefiltert nach Geschlecht. */
-function initGroupToggle(toggleId,chartId,groups,getSubBase,dimKey,cls){
-  const opts=[{k:'alle',l:'Alle',f:()=>true},{k:'m',l:'Männlich',f:r=>r.geschlecht===0},{k:'w',l:'Weiblich',f:r=>r.geschlecht===1}];
-  function render(k){
-    const f=opts.find(o=>o.k===k).f;
-    document.getElementById(chartId).innerHTML=groupChart(groups,i=>getSubBase(i).filter(f),dimKey,cls);
-  }
-  document.getElementById(toggleId).innerHTML=opts.map((o,i)=>
-    '<button data-k="'+o.k+'"'+(i===0?' class="on"':'')+'>'+o.l+'</button>').join('');
-  document.getElementById(toggleId).addEventListener('click',e=>{
-    const b=e.target.closest('button');if(!b)return;
-    document.querySelectorAll('#'+toggleId+' button').forEach(x=>x.classList.toggle('on',x===b));
-    render(b.dataset.k);
+/* ---------- Filter-Panel: Checkboxen statt Umschalt-Buttons ----------
+   Mehrere Facetten (z. B. Geschlecht, Aufgewachsen) lassen sich gleichzeitig
+   und unabhängig voneinander anhaken. Innerhalb einer Facette gilt ODER
+   (nichts angehakt = alle durchgelassen), zwischen Facetten gilt UND. */
+const FACET_GESCHLECHT={key:'geschlecht',label:'Geschlecht',options:[{v:0,l:'Männlich'},{v:1,l:'Weiblich'},{v:2,l:'Divers'},{v:3,l:'Sonstiges'}]};
+const FACET_AUFGEWACHSEN={key:'aufgewachsen',label:'Aufgewachsen',options:[{v:0,l:'Dorf'},{v:1,l:'Kleinstadt'},{v:2,l:'Mittelstadt'},{v:3,l:'Großstadt'}]};
+const FACET_WOHLSTAND={key:'sesGroup',label:'Wohlstand',options:[{v:0,l:'Geringer'},{v:1,l:'Mittlerer'},{v:2,l:'Höherer'}]};
+
+function renderFilterPanelHTML(facets){
+  if(!facets||!facets.length)return '';
+  return '<details class="filterpanel"><summary>Filter</summary><div class="filter-body">'+
+    facets.map(f=>
+      '<div class="filtergroup"><span class="fl">'+f.label+'</span>'+
+      f.options.map(o=>'<label class="fchk"><input type="checkbox" data-k="'+f.key+'" data-v="'+o.v+'"> '+o.l+'</label>').join('')+
+      '</div>'
+    ).join('')+
+    '</div></details>';
+}
+function wireFilterPanel(panelId,state,onChange){
+  document.getElementById(panelId).addEventListener('change',e=>{
+    const cb=e.target;
+    if(cb.tagName!=='INPUT')return;
+    const k=cb.dataset.k, v=Number(cb.dataset.v);
+    if(cb.checked)state[k].add(v);else state[k].delete(v);
+    onChange();
   });
-  render('alle');
+}
+function facetPasses(state,facets,r){
+  return facets.every(f=>{
+    const sel=state[f.key];
+    return sel.size===0||sel.has(r[f.key]);
+  });
+}
+
+/* ---------- Filter-Panel über einem Gruppen-Chart ----------
+   getSubBase(i) liefert wie gewohnt die Grunddaten je Gruppen-Index,
+   ungefiltert; die hier angehakten Facetten schränken sie zusätzlich ein. */
+function initGroupFilter(panelId,chartId,groups,getSubBase,dimKey,cls,facets){
+  const state={};
+  facets.forEach(f=>state[f.key]=new Set());
+  function render(){
+    document.getElementById(chartId).innerHTML=groupChart(groups,i=>getSubBase(i).filter(r=>facetPasses(state,facets,r)),dimKey,cls);
+  }
+  document.getElementById(panelId).innerHTML=renderFilterPanelHTML(facets);
+  wireFilterPanel(panelId,state,render);
+  render();
 }
 
 /* ---------- key-facts row (Teilnehmende + Gesamt-Index) ---------- */
@@ -260,45 +288,23 @@ function typeKeyFor(r){
   const sorted=dims.map((d,i)=>Object.assign({},d,{i})).sort((a,b)=>(b.v-a.v)||(a.i-b.i));
   return sorted[0].k+sorted[1].k;
 }
-function initTypeGrid(gridId,toggleId,genderToggleId){
-  let typeFilter='alle';
-  let genderFilter='alle';
+function initTypeGrid(gridId,panelId){
+  const facets=[FACET_WOHLSTAND,FACET_GESCHLECHT,FACET_AUFGEWACHSEN];
+  const state={};
+  facets.forEach(f=>state[f.key]=new Set());
   function countsFor(filterFn){
     const c={};TYPEN_KEYS.forEach(k=>c[k]=0);
     DATA.filter(filterFn).forEach(r=>{const k=typeKeyFor(r);c[k]=(c[k]||0)+1;});
     return TYPEN_KEYS.map(k=>c[k]);
   }
   function render(){
-    const f=r=>{
-      if(typeFilter==='niedrig'&&r.sesGroup!==0)return false;
-      if(typeFilter==='hoch'&&r.sesGroup!==2)return false;
-      if(genderFilter==='m'&&r.geschlecht!==0)return false;
-      if(genderFilter==='w'&&r.geschlecht!==1)return false;
-      return true;
-    };
-    const counts=countsFor(f);
+    const counts=countsFor(r=>facetPasses(state,facets,r));
     const max=Math.max(...counts,1);
     document.getElementById(gridId).innerHTML=TYPEN.map((t,i)=>
       '<div class="typecard"><div class="tn">'+t+'</div><div class="tv">'+counts[i]+'</div><div class="tbar"><i style="width:'+(counts[i]/max*100)+'%"></i></div></div>').join('');
   }
-  document.getElementById(toggleId).innerHTML=
-    '<button data-f="alle" class="on">Alle</button><button data-f="niedrig">Geringerer Wohlstand</button><button data-f="hoch">Höherer Wohlstand</button>';
-  document.getElementById(toggleId).addEventListener('click',e=>{
-    const b=e.target.closest('button');if(!b)return;
-    typeFilter=b.dataset.f;
-    document.querySelectorAll('#'+toggleId+' button').forEach(x=>x.classList.toggle('on',x===b));
-    render();
-  });
-  if(genderToggleId){
-    document.getElementById(genderToggleId).innerHTML=
-      '<button data-g="alle" class="on">Alle</button><button data-g="m">Männlich</button><button data-g="w">Weiblich</button>';
-    document.getElementById(genderToggleId).addEventListener('click',e=>{
-      const b=e.target.closest('button');if(!b)return;
-      genderFilter=b.dataset.g;
-      document.querySelectorAll('#'+genderToggleId+' button').forEach(x=>x.classList.toggle('on',x===b));
-      render();
-    });
-  }
+  document.getElementById(panelId).innerHTML=renderFilterPanelHTML(facets);
+  wireFilterPanel(panelId,state,render);
   render();
 }
 
