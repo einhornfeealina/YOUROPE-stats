@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Zugehörigkeit bleibt gleich, der Rest nicht</title>
-<link rel="stylesheet" href="assets/stats.css?v=8">
+<link rel="stylesheet" href="assets/stats.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -21,7 +21,7 @@
         <div class="li"><span class="sw fill mid"></span> mittlerer Wohlstand</div>
         <div class="li"><span class="sw fill hi"></span> höherer Wohlstand</div>
       </div>
-      <div class="toggles" id="genderToggle"></div>
+      <div id="filterPanel"></div>
       <div id="thesisChart"></div>
     </div>
 
@@ -30,12 +30,15 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=9"></script>
+<script src="assets/stats-data.js?v=10"></script>
 <script>
 initData().then(function(){
   const dims=[{k:'Z',name:'Zugehörigkeit'},{k:'M',name:'Möglichkeiten'},{k:'V',name:'Vernetzung'},{k:'T',name:'Teilhabe'}];
-  function render(genderFilter){
-    const base=genderFilter==='alle'?DATA:DATA.filter(r=>r.geschlecht===(genderFilter==='m'?0:1));
+  const facets=[FACET_GESCHLECHT,FACET_AUFGEWACHSEN];
+  const state={};
+  facets.forEach(f=>state[f.key]=new Set());
+  function render(){
+    const base=DATA.filter(r=>facetPasses(state,facets,r));
     let html='';
     dims.forEach(d=>{
       const vLo=base.filter(r=>r.sesGroup===0).map(r=>r[d.k]);
@@ -48,14 +51,9 @@ initData().then(function(){
     });
     document.getElementById('thesisChart').innerHTML=html;
   }
-  document.getElementById('genderToggle').innerHTML=
-    '<button data-g="alle" class="on">Alle</button><button data-g="m">Männlich</button><button data-g="w">Weiblich</button>';
-  document.getElementById('genderToggle').addEventListener('click',e=>{
-    const b=e.target.closest('button');if(!b)return;
-    document.querySelectorAll('#genderToggle button').forEach(x=>x.classList.toggle('on',x===b));
-    render(b.dataset.g);
-  });
-  render('alle');
+  document.getElementById('filterPanel').innerHTML=renderFilterPanelHTML(facets);
+  wireFilterPanel('filterPanel',state,render);
+  render();
 });
 </script>
 </body>

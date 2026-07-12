@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Alter &amp; Zugehörigkeit</title>
-<link rel="stylesheet" href="assets/stats.css?v=8">
+<link rel="stylesheet" href="assets/stats.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -16,7 +16,7 @@
 
     <div class="cell">
       <div class="sub">Europäisches Zugehörigkeitsgefühl beschreibt, wie verbunden sich jemand mit Europa fühlt. Erhoben haben wir das im Workshop unter anderem darüber, mit wie vielen europäischen Begriffen sich Teilnehmende identifizieren und welches von sieben Memes ihre Beziehung zu Europa am besten beschreibt — von sehr positiv bis sehr negativ. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert nach Altersgruppe der Teilnehmenden.</div>
-      <div class="toggles" id="genderToggle"></div>
+      <div id="filterPanel"></div>
       <div id="chart"></div>
     </div>
 
@@ -25,10 +25,10 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=9"></script>
+<script src="assets/stats-data.js?v=10"></script>
 <script>
 initData().then(function(){
-  initGroupToggle('genderToggle','chart',ALTER_GRUPPEN,i=>DATA.filter(r=>r.alter===i),'Z','hi');
+  initGroupFilter('filterPanel','chart',ALTER_GRUPPEN,i=>DATA.filter(r=>r.alter===i),'Z','hi',[FACET_GESCHLECHT,FACET_AUFGEWACHSEN]);
 });
 </script>
 </body>

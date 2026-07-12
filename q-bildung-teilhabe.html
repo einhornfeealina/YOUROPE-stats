@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Bildung &amp; Teilhabe</title>
-<link rel="stylesheet" href="assets/stats.css?v=8">
+<link rel="stylesheet" href="assets/stats.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -17,6 +17,7 @@
     <div class="cell">
       <div class="sub">Politische Teilhabe an Europa hat zwei Seiten, die wir im Workshop getrennt voneinander erhoben haben: wie viel jemand über die EU weiß — zum Beispiel wie viele Mitglieder der EU-Kommission oder europäische Grundrechte die Person kennt — und wie sehr sich jemand wünscht, politisch mitbestimmen zu können, etwa bei Europawahlen. Beides ergibt einen eigenen Wert zwischen 0 und 10. Über den Umschalter kannst du beide Werte einzeln ansehen, jeweils nach höchstem Bildungsabschluss der Teilnehmenden.</div>
       <div class="toggles" id="toggle"></div>
+      <div id="filterPanel"></div>
       <div id="chart"></div>
     </div>
 
@@ -25,14 +26,17 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=9"></script>
+<script src="assets/stats-data.js?v=10"></script>
 <script>
 initData().then(function(){
   let mode='wissen';
+  const facets=[FACET_GESCHLECHT,FACET_AUFGEWACHSEN];
+  const state={};
+  facets.forEach(f=>state[f.key]=new Set());
   function render(){
     let html='';
     BILDUNG_GRUPPEN.forEach((name,i)=>{
-      const vals=DATA.filter(r=>r.bildung===i).map(r=>mode==='wissen'?r.Twissen:r.Twollen);
+      const vals=DATA.filter(r=>r.bildung===i&&facetPasses(state,facets,r)).map(r=>mode==='wissen'?r.Twissen:r.Twollen);
       html+=barRow(name,mean(vals),'hi',vals.length,std(vals));
     });
     document.getElementById('chart').innerHTML='<div class="group">'+html+'</div>';
@@ -45,6 +49,8 @@ initData().then(function(){
     document.querySelectorAll('#toggle button').forEach(x=>x.classList.toggle('on',x===b));
     render();
   });
+  document.getElementById('filterPanel').innerHTML=renderFilterPanelHTML(facets);
+  wireFilterPanel('filterPanel',state,render);
   render();
 });
 </script>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Staatsangehörigkeit &amp; Wahlrecht</title>
-<link rel="stylesheet" href="assets/stats.css?v=8">
+<link rel="stylesheet" href="assets/stats.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -16,7 +16,7 @@
 
     <div class="cell">
       <div class="sub">Ein Teil der politischen Teilhabe an Europa ist die Selbsteinschätzung, wie sehr man an Wahlen teilnehmen darf. Erhoben haben wir das im Workshop darüber, wie stark Teilnehmende der Aussage „Ich darf an Wahlen teilnehmen" zustimmen. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert zwischen Teilnehmenden mit einer und mit mehreren Staatsangehörigkeiten.</div>
-      <div class="toggles" id="genderToggle"></div>
+      <div id="filterPanel"></div>
       <div id="chart"></div>
     </div>
 
@@ -25,10 +25,10 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=9"></script>
+<script src="assets/stats-data.js?v=10"></script>
 <script>
 initData().then(function(){
-  initGroupToggle('genderToggle','chart',STAAT_GRUPPEN,i=>DATA.filter(r=>r.staat===i),'Tdarf','hi');
+  initGroupFilter('filterPanel','chart',STAAT_GRUPPEN,i=>DATA.filter(r=>r.staat===i),'Tdarf','hi',[FACET_GESCHLECHT,FACET_AUFGEWACHSEN]);
 });
 </script>
 </body>

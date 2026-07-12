@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Bildung &amp; Vernetzung</title>
-<link rel="stylesheet" href="assets/stats.css?v=8">
+<link rel="stylesheet" href="assets/stats.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -16,7 +16,7 @@
 
     <div class="cell">
       <div class="sub">Europäische Vernetzung beschreibt, wie gut jemand mit anderen Menschen und Kulturen in Europa verbunden ist — zum Beispiel über erkannte Fremdsprachen oder Freund*innen in anderen EU-Ländern. Erhoben haben wir das im Workshop unter anderem darüber, wie viele europäische Amtssprachen Teilnehmende erkennen konnten. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert nach höchstem Bildungsabschluss der Teilnehmenden.</div>
-      <div class="toggles" id="genderToggle"></div>
+      <div id="filterPanel"></div>
       <div id="chart"></div>
     </div>
 
@@ -25,10 +25,10 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=9"></script>
+<script src="assets/stats-data.js?v=10"></script>
 <script>
 initData().then(function(){
-  initGroupToggle('genderToggle','chart',BILDUNG_GRUPPEN,i=>DATA.filter(r=>r.bildung===i),'V','hi');
+  initGroupFilter('filterPanel','chart',BILDUNG_GRUPPEN,i=>DATA.filter(r=>r.bildung===i),'V','hi',[FACET_GESCHLECHT,FACET_AUFGEWACHSEN]);
 });
 </script>
 </body>

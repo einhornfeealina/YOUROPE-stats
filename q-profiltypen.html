@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Profiltypen</title>
-<link rel="stylesheet" href="assets/stats.css?v=8">
+<link rel="stylesheet" href="assets/stats.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -16,8 +16,7 @@
 
     <div class="cell">
       <div class="sub">Am Ende des Workshops bekommt jede*r Teilnehmende einen von 12 möglichen „Europa-Typen" zugewiesen — basierend auf den zwei Bereichen (Zugehörigkeit, Möglichkeiten, Vernetzung oder Teilhabe), in denen die Person am stärksten abgeschnitten hat. Hier siehst du, wie oft jeder Typ vorkommt — und über den Filter, ob sich das zwischen wirtschaftlich schwächer und stärker gestellten Teilnehmenden unterscheidet.</div>
-      <div class="toggles" id="typeToggle"></div>
-      <div class="toggles" id="genderToggle"></div>
+      <div id="filterPanel"></div>
       <div class="typegrid" id="typeGrid"></div>
     </div>
 
@@ -26,10 +25,10 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=9"></script>
+<script src="assets/stats-data.js?v=10"></script>
 <script>
 initData().then(function(){
-  initTypeGrid('typeGrid','typeToggle','genderToggle');
+  initTypeGrid('typeGrid','filterPanel');
 });
 </script>
 </body>

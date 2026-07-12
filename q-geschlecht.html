@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Geschlecht &amp; Teilhabe</title>
-<link rel="stylesheet" href="assets/stats.css?v=8">
+<link rel="stylesheet" href="assets/stats.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -16,6 +16,7 @@
 
     <div class="cell">
       <div class="sub">Politische Teilhabe an Europa beschreibt unter anderem, wie sehr sich jemand wünscht, politisch mitbestimmen zu können — etwa bei Europawahlen. Erhoben haben wir das im Workshop danach, wie stark Teilnehmende diesem Wunsch zustimmen. Daraus ergibt sich ein Wert zwischen 0 und 10. Hier vergleichen wir diesen Wert nach dem angegebenen Geschlecht der Teilnehmenden.</div>
+      <div id="filterPanel"></div>
       <div id="chart"></div>
     </div>
 
@@ -24,10 +25,10 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=9"></script>
+<script src="assets/stats-data.js?v=10"></script>
 <script>
 initData().then(function(){
-  document.getElementById('chart').innerHTML=groupChart(GESCHLECHT_GRUPPEN,i=>DATA.filter(r=>r.geschlecht===i),'T','hi');
+  initGroupFilter('filterPanel','chart',GESCHLECHT_GRUPPEN,i=>DATA.filter(r=>r.geschlecht===i),'T','hi',[FACET_AUFGEWACHSEN]);
 });
 </script>
 </body>

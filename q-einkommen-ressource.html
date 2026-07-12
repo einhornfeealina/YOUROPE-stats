@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YOUROPE — Einkommen &amp; Grundrechte</title>
-<link rel="stylesheet" href="assets/stats.css?v=8">
+<link rel="stylesheet" href="assets/stats.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -16,7 +16,7 @@
 
     <div class="cell">
       <div class="sub">Bei einer Aufgabe im Workshop lagen Zettel mit einzelnen Grundgesetz-Artikeln aus — Grundrechte, die eigentlich für alle gelten sollten. Teilnehmende konnten sich davon nehmen, wie viele sie wollten. Je mehr jemand genommen hat, desto eher hatte diese Person offenbar das Gefühl, dass zu wenige dieser Rechte für sie bereits gelten oder eingehalten werden — wer sich ohnehin sicher fühlte, musste sich weniger davon nehmen. Daraus ergibt sich ein Wert zwischen 0 und 10, wobei ein hoher Wert für ein größeres Gefühl von Rechtssicherheit steht. Hier vergleichen wir diesen Wert nach monatlichem Nettoeinkommen der Teilnehmenden.</div>
-      <div class="toggles" id="genderToggle"></div>
+      <div id="filterPanel"></div>
       <div id="chart"></div>
     </div>
 
@@ -25,10 +25,10 @@
     </div>
 </div>
 
-<script src="assets/stats-data.js?v=9"></script>
+<script src="assets/stats-data.js?v=10"></script>
 <script>
 initData().then(function(){
-  initGroupToggle('genderToggle','chart',EINKOMMEN_GRUPPEN,i=>DATA.filter(r=>r.einkommen===i),'Tgrundgesetz','hi');
+  initGroupFilter('filterPanel','chart',EINKOMMEN_GRUPPEN,i=>DATA.filter(r=>r.einkommen===i),'Tgrundgesetz','hi',[FACET_GESCHLECHT,FACET_AUFGEWACHSEN]);
 });
 </script>
 </body>
